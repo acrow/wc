@@ -1,0 +1,30 @@
+<div class="modal-header">
+	<h3 class="modal-title" >数据字典</h3>
+</div>
+<form class="modal-body form-horizontal" name="form" role="form" novalidate>
+	<div class="form-group  has-feedback">
+		<label class="col-sm-4 control-label" for="name">名称</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="name" name="name" class="form-control" ng-model="entity.name" required >
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.name.$dirty && form.name.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback">
+		<label class="col-sm-4 control-label" for="sortIndex">排序</label>
+		<div class="col-sm-5 controls">
+			<input type="number" id="sortIndex" name="sortIndex" class="form-control" ng-model="entity.sortIndex" required >
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.sortIndex.$dirty && form.sortIndex.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" >
+		<label class="col-sm-4 control-label" for="description">说明</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="description" name="description" class="form-control" ng-model="entity.description">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.description.$valid"></span>
+		</div>
+	</div>
+</form>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">保存</button>
+	<button class="btn btn-warning" ng-click="cancel()">取消</button>
+</div>

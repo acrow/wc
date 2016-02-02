@@ -1,0 +1,22 @@
+
+<div class='navbar'>
+	&nbsp;<div class="nav navbar-nav navbar-left h1">数据字典
+		<small>
+	      &nbsp;<select id="paymethod" ng-model="currentDictType" ng-options="opt.value as opt.name for opt  in dict.dictType" ng-change="dictTypeChanged();">
+		  </select>
+		</small>
+	</div>
+	<div class="nav navbar-nav navbar-left ">
+	</div>
+          
+      <div class="navbar-form navbar-right" >
+      <button type="submit" class="btn btn-success btn-lg" data-ng-click="addNew()"><span class="glyphicon glyphicon-file"></span> 新建</button>
+      </div>
+
+	</div>
+<div class="grid"   ui-grid="gridOptions"  ui-grid-pagination ui-grid-auto-resize ng-style="getTableHeight()"></div>
+
+
+
+
+

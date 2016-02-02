@@ -1,0 +1,19 @@
+
+<div class='navbar'>
+	&nbsp;<div class="nav navbar-nav navbar-left h2">&nbsp;&nbsp;报销单列表</div>
+	<div class="nav navbar-nav navbar-left">
+	</div>
+          
+      <div class="navbar-form navbar-right" >
+      <button type="submit" class="btn btn-success btn-lg" data-ng-click="addNew()"><span class="glyphicon glyphicon-file"></span> 新建</button>
+
+        <button type="submit" class="btn btn-primary btn-lg" data-ng-click="toggleFilter()"><span class="glyphicon glyphicon-search"></span> 检索</button>&nbsp;&nbsp;&nbsp;
+      </div>
+
+	</div>
+<div class="grid"   ui-grid="gridOptions"  ui-grid-pagination ui-grid-auto-resize ng-style="getTableHeight()"></div> 
+
+
+
+
+

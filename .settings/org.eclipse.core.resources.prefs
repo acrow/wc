@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//WebContent/login.jsp=UTF-8
+encoding//WebContent/view/borrow.html=UTF-8
+encoding//WebContent/view/editor.html=UTF-8
+encoding//WebContent/view/expenseAccount.html=UTF-8
+encoding//WebContent/view/staff.html=UTF-8
+encoding//conf/app.properties=UTF-8
+encoding/<project>=UTF-8
+separateDerivedEncodings=true

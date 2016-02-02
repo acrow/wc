@@ -1,0 +1,112 @@
+<div class="modal-header">
+	<h3 class="modal-title" ng-show="type==1">报销单</h3>
+	<h3 class="modal-title" ng-show="type==-1">借款单</h3>
+	<h3 class="modal-title" ng-show="type==0">借款单报销</h3>
+</div>
+<form class="modal-body form-horizontal" name="form" role="form" novalidate>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="deptCode">部门编号</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="deptCode" name="deptCode" ng-model="entity.deptCode" class="form-control" required>
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.deptCode.$dirty && form.deptCode.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="financeProjCode">项目财务编号</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="financeProjCode" name="financeProjCode" ng-model="entity.financeProjCode" class="form-control" required>
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.financeProjCode.$dirty && form.financeProjCode.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback"  ng-show="type==1 || type==0">
+		<label class="col-sm-4 control-label" for="subject">科目</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="subject" name="subject" ng-model="entity.subject" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.subject.$dirty && form.subject.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="summary">摘要</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="summary" name="summary" ng-model="entity.summary" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.summary.$dirty && form.summary.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="amount">支出金额</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="amount" name="amount" ng-model="entity.amount"  ng-pattern="/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/" class="form-control" required>
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.amount.$dirty && form.amount.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="paymethod">支出方式</label>
+		<div class="col-sm-5 controls" >
+			<select id="paymethod" name="paymethod" ng-model="entity.paymethod" ng-options="opt.value as opt.name for opt  in dict.paymethod" class="form-control">
+				<option value="">请选择</option> 
+			</select>
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.paymethod.$dirty && form.paymethod.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="currencyType">币种</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="currencyType" name="currencyType" ng-model="entity.currencyType" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.currencyType.$dirty && form.currencyType.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="toCompany">发票单位</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="toCompany" name="toCompany" ng-model="entity.toCompany" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.toCompany.$dirty && form.toCompany.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="projManager">课题负责人</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="projManager" name="projManager" ng-model="entity.projManager" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.projManager.$dirty && form.projManager.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback"  ng-show="type==1 || type==0">
+		<label class="col-sm-4 control-label" for="projCode">实际项目编号</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="projCode" name="projCode" ng-model="entity.projCode" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.projCode.$dirty && form.projCode.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback"  ng-show="type==1 || type==0">
+		<label class="col-sm-4 control-label" for="submitter">报销人</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="submitter" name="submitter" ng-model="entity.submitter" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.submitter.$dirty && form.submitter.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback"  ng-show="type==-1">
+		<label class="col-sm-4 control-label" for="borrower">借款人</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="borrower" name="borrower" ng-model="entity.borrower" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.borrower.$dirty && form.borrower.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback"  ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="result">处理结果</label>
+		<div class="col-sm-5 controls">
+			<input type="text" id="result" name="result" ng-model="entity.result" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.result.$dirty && form.result.$valid"></span>
+		</div>
+	</div>
+	<div class="form-group has-feedback" ng-show="type==1 || type==-1">
+		<label class="col-sm-4 control-label" for="memo">备注</label>
+		<div class="col-sm-8 controls">
+			<input type="text" id="memo" name="memo" ng-model="entity.memo" class="form-control">
+			<span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.memo.$dirty && form.memo.$valid"></span>
+		</div>
+	</div>
+</form>
+<div class="modal-footer">
+ 	<button class="btn btn-default pull-left" ng-click="saveNew()" ng-show="entity.id && type != 0">另存</button>
+	<button class="btn btn-primary" ng-click="ok()">保存</button>
+	<button class="btn btn-warning" ng-click="cancel()">取消</button>
+</div>
