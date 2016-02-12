@@ -6,9 +6,9 @@ var ioc = {
             	{	type : 'org.nutz.ioc.aop.config.impl.JsonAopConfigration',
                     fields : {
                     	itemList : [
-                            ['rate\\.wechat\\..+Service','.+','ioc:txREAD_COMMITTED'],
-                            ['rate\\.wechat\\..+Manager','.+','ioc:txREAD_COMMITTED'],
-                            ['rate\\.wechat\\..+Dao',    '.+','ioc:txREAD_COMMITTED']
+                            ['muchon\\.wechat\\..+Service','.+','ioc:txREAD_COMMITTED'],
+                            ['muchon\\.wechat\\..+Manager','.+','ioc:txREAD_COMMITTED'],
+                            ['muchon\\.wechat\\..+Dao',    '.+','ioc:txREAD_COMMITTED']
                         ]
                      }
                  },
