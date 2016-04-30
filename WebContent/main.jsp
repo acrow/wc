@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/> 
-<title>清华大学WMC组报销登记系统</title>
+<title>木憧微信平台</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-theme.min.css" rel="stylesheet">
 <link href="bower_components/angular-ui-grid/ui-grid.min.css" rel="stylesheet">

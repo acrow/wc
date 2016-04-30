@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>清华大学WMC组报销登记系统</title>
+<title>木憧微信平台</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-theme.min.css" rel="stylesheet">
 </head>
@@ -14,7 +14,7 @@
 	<img src="./img/login.jpeg" class="col-md-offset-2 col-md-4" style="height:400px;width:400px">
 	<form action="./login"  method="post" class= "form-horizontal col-md-4" name="form" role="form" style="background-color:#009AC6;color:white" novalidate  >
 	<br><br><br><br><br>
-	<p class="h2 text-center"><strong>清华大学WMC组报销登记系统</strong></p>
+	<p class="h2 text-center"><strong>木憧微信平台</strong></p>
 	<br><br>
 		<div class="form-group ">
 			<label class="col-sm-4 control-label" for="logName">登录名</label>
