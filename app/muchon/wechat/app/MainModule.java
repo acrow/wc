@@ -18,7 +18,7 @@ import muchon.wechat.app.domain.Staff;
 @Ok("json")
 @Fail("json")
 @Localization("msg")
-@SetupBy(AppSetup.class)
+@SetupBy(WechatSetup.class)
 @Modules(scanPackage = true)
 @Encoding(input = "utf8", output = "utf8")
 @IocBy(type = ComboIocProvider.class, args = {"*org.nutz.ioc.loader.json.JsonLoader",

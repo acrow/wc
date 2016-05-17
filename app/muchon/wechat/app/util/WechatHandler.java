@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -24,7 +23,7 @@ import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-import muchon.wechat.app.App;
+import muchon.wechat.app.Context;
 import muchon.wechat.app.domain.wechat.ArticleMsg;
 import muchon.wechat.app.domain.wechat.TemplatelMsg;
 import muchon.wechat.base.dto.MyX509TrustManager;
@@ -45,8 +44,8 @@ public class WechatHandler {
 		if (Strings.isBlank(_accessToken) || (new Date()).after(_accessTokenExpires)) {
 			
 			Map<String, String> resultMap = httpsGetMap(
-					"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + App.wechatAppId()
-							+ "&secret=" + App.wechatAppSecret());
+					"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + Context.getWechatAppId()
+							+ "&secret=" + Context.getWechatAppSecret());
 			if (resultMap != null) {
 				_accessToken = resultMap.get("access_token");
 				_accessTokenExpires = new Date(new Date().getTime() + (Long.parseLong(resultMap.get("expires_in")) - 200) * 1000);
@@ -420,11 +419,60 @@ public class WechatHandler {
 	/*************************************************************************/
 	
 	/***
-	 * 上传图文中的图片至微信
+	 * 上传临时素材
+	 * @param type 媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb）
 	 * @return
 	 */
-	public static String uploadIgInArticle(String imgPath) {
-		String result = httpsUpload("https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token==" + accessToken(), imgPath);
+	public static String uploadTmpMedia(String type, String filePath) {
+		String result = httpsUpload("https://api.weixin.qq.com/cgi-bin/media/upload?access_token=" + accessToken() + "&type=" + type, filePath);
+		return result;
+	}
+	/***
+	 * 获取临时素材
+	 * @return
+	 */
+	public static String getTmpMedia(String mediaId) {
+		String result = httpsGetJson("https://api.weixin.qq.com/cgi-bin/media/get?access_token="+ accessToken() + "&media_id=" + mediaId);
+		return result;
+	}
+	/***
+	 * 上传永久图文素材
+	 * @param type 视频（video）
+	 * @return
+	 */
+	public static String uploadArticleMedia(ArticleMsg msg) {
+		String result = httpsPostJson("https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=" + accessToken(), Json.toJson(msg));
+		return result;
+	}
+	/***
+	 * 上传永久素材
+	 * @param type 媒体文件类型，分别有图片（image）、语音（voice）和缩略图（thumb）
+	 * @return
+	 */
+	public static String uploadMedia(String type, String filePath) {
+		String result = httpsUpload("https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=" + accessToken() + "&type=" + type, filePath);
+		return result;
+	}
+	/***
+	 * 上传永久视频素材
+	 * @param type 视频（video）
+	 * @return
+	 */
+	public static String uploadVideoMedia(String type, String filePath, String videoTitle, String introduction) {
+		Map<String, String> descMap = new HashMap<String, String>();
+		descMap.put("VIDEO_TITLE", videoTitle);
+		descMap.put("INTRODUCTION", introduction);
+		String result = httpsUpload("https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=" + accessToken() + "&type=video&description=" + Json.toJson(descMap), filePath);
+		return result;
+	}
+	/***
+	 * 获取永久素材
+	 * @return
+	 */
+	public static String getMedia(String mediaId) {
+		Map<String, String> mediaMap = new HashMap<String, String>();
+		mediaMap.put("media_id", mediaId);
+		String result = httpsPostJson("https://api.weixin.qq.com/cgi-bin/material/get_material?access_token="+ accessToken(), Json.toJson(mediaMap));
 		return result;
 	}
 	

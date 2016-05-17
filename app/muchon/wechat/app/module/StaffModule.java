@@ -15,7 +15,7 @@ import org.nutz.mvc.annotation.DELETE;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 
-import muchon.wechat.app.App;
+import muchon.wechat.app.Context;
 import muchon.wechat.app.domain.Staff;
 import muchon.wechat.app.service.DictService;
 import muchon.wechat.app.service.StaffService;
@@ -44,7 +44,7 @@ public class StaffModule {
 	@AdaptBy(type=JsonAdaptor.class)
 	public Result insert(Staff staff) {
 		if (Strings.isBlank(staff.getPassword())) {
-			staff.setPassword(String.valueOf(App.getDefaultPassword().hashCode()));
+			staff.setPassword(String.valueOf(Context.getDefaultPassword().hashCode()));
 		}
 		return staffService.save(staff, null, null);
 	}

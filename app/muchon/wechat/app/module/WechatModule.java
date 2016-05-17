@@ -1,19 +1,26 @@
 package muchon.wechat.app.module;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 
-import muchon.wechat.app.App;
+import muchon.wechat.app.Context;
 import muchon.wechat.app.domain.Attachment;
 import muchon.wechat.app.domain.wechat.TemplateMsgDataProp;
 import muchon.wechat.app.domain.wechat.TemplatelMsg;
@@ -146,7 +153,19 @@ public class WechatModule {
 	@At
 	@Ok("raw")
 	public String sendAtcMsg() {
-		return App.hostUrl();
+		return Context.getHostUrl();
+	}
+	
+	
+	@At
+	@Ok("raw")
+	public String uploadMedia(String type, String filePath) {
+		return WechatHandler.uploadTmpMedia(type, filePath);
+	}
+	@At
+	@Ok("raw")
+	public String getMedia(String mediaId) {
+		return WechatHandler.getTmpMedia(mediaId);
 	}
 	
 	/**
@@ -162,7 +181,7 @@ public class WechatModule {
         	String oldUrl = m.group(1);
         	String newUrl = oldUrl;
         	if (!oldUrl.toLowerCase().contains("http://")) { // 相对URL改为绝对URL，否则微信访问不到
-        		oldUrl = App.hostUrl() + oldUrl;
+        		oldUrl = Context.getHostUrl() + oldUrl;
         	}
         	// 先在数据库中查找
         	Attachment img = attachmentService.findByLocalUrl(oldUrl);
@@ -180,6 +199,87 @@ public class WechatModule {
         	result = result.replace(m.group(1), newUrl);
         }
         
+		return result;
+	}
+	@At
+	public void entrance(String echostr, String timestamp, String nonce, String signature, HttpServletRequest req, HttpServletResponse resp) {
+		if (Strings.isNotBlank(echostr)) {
+			log.info(echostr);
+			//return echostr;
+		}
+		 String postStr = readPostDataFromRequest(req);
+		 Document doc = null;
+		 try{
+			 doc  = DocumentHelper.parseText(postStr);
+		 }catch(Exception e){
+			 log.error("无法解析微信XML数据。" + e.getMessage());
+			 e.printStackTrace();
+		 }
+		 if(Lang.isEmpty(doc )){
+			 try {
+				resp.getWriter().print( "");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 } else {
+			 try {
+				 String restl = doMsg(doc);
+				resp.getWriter().print(restl);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 
+		 }
+	}
+	
+	//从输入流读取post参数
+	private String readPostDataFromRequest(HttpServletRequest req){
+		StringBuilder strBuilder = new StringBuilder();
+		try{
+	
+			 byte[] buf = new byte[1024];
+			 int len = req.getInputStream().read(buf,0,1024);
+			 while(len != -1){
+				 	strBuilder.append(new String(buf,0,len,"utf-8"));
+			        len = req.getInputStream().read(buf,0,1024);
+			 }
+		}catch(Exception e){
+			log.error("无法读取微信XML数据。" + e.getMessage());
+			e.printStackTrace();
+		}
+		return strBuilder.toString().trim();
+	}
+	
+	private String doMsg(Document doc) {
+		Element root = doc.getRootElement();
+        String fromUsr = root.elementText("FromUserName");
+        String toUsr = root.elementText("ToUserName");
+        String msgType = root.elementText("MsgType"); // 消息类型
+        String createTime = root.elementText("CreateTime");
+        String msgId = root.elementText("MsgId");
+        log.info("用户" + fromUsr + "发送至" + toUsr + "类型" + msgType + "时间" + createTime + "" + msgId);
+        if ("event".equals(msgType)) {
+        	String event = root.elementText("Event");
+        	if ("subscribe".equals(event)) {
+        		return replyTxtMsg(fromUsr, toUsr, "欢迎关注！");
+        	}
+        	if ("CLICK".equals(event)) {
+        		return replyTxtMsg(fromUsr, toUsr, "点击!");
+        	}
+        }
+        if ("text".equals(msgType)) {
+        	String content = root.elementText("Content");
+        	return replyTxtMsg(fromUsr, toUsr, content);
+        }
+        return "";
+	}
+	
+	private String replyTxtMsg(String toUsr, String fromUsr, String content) {
+		Date d = new Date();
+		String result = String.format("<xml><ToUserName><![CDATA[%s]]</ToUserName><FromUserName><![CDATA[%s]]</FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[%s]]></Content></xml>", toUsr, fromUsr, String.valueOf(d.getTime()), content);
+		log.info(result);
 		return result;
 	}
 }

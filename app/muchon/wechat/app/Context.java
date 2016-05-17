@@ -4,16 +4,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.servlet.ServletRequest;
-
 import org.nutz.ioc.impl.PropertiesProxy;
+import org.nutz.lang.Stopwatch;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.NutConfig;
 
-public abstract class App {
+public abstract class Context {
     private static Log log = Logs.get();
 
     private static boolean inited = false;
@@ -36,15 +35,22 @@ public abstract class App {
         if (inited) {
             return;
         }
-        log.info("开始初始化App...");
+        Stopwatch sw = Stopwatch.begin();
+        log.info("开始加载配置...");
         cfg = config;
         prop = cfg.getIoc().get(PropertiesProxy.class, "config").toProperties();
 
-        log.info("App初始化完毕！");
+        log.info("加载配置完毕！");
+        
         startupTime = new Date(System.currentTimeMillis());
         ver = Times.format(new SimpleDateFormat("yyyyMMddHHmmss"), startupTime);
         build = Times.format(new SimpleDateFormat("yyyy-MM-dd"), startupTime);
         inited = true;
+        
+        sw.stop();
+        log.info("应用程序：" + getAppName());
+        log.info("版本号：" + ver() + " 发布日期：" + build());
+        log.info("启动用时：" + sw.getDuration());
     }
     
     /**
@@ -178,7 +184,10 @@ public abstract class App {
     }
 
     private static String _wechatAppId = "";
-    public static String wechatAppId() {
+    public static void setWechatAppId(String wechatAppId) {
+    	_wechatAppId = wechatAppId;
+    }
+    public static String getWechatAppId() {
     	if (Strings.isBlank(_wechatAppId)) {
     		_wechatAppId = prop.getProperty("wechat.appid", "");
     	}
@@ -186,7 +195,10 @@ public abstract class App {
     }
     
     private static String _wechatAppSecret = "";
-    public static String wechatAppSecret() {
+    public static void setWechatAppSecret(String wechatAppSecret) {
+    	_wechatAppSecret = wechatAppSecret;
+    }
+    public static String getWechatAppSecret() {
     	if (Strings.isBlank(_wechatAppSecret)) {
     		_wechatAppSecret = prop.getProperty("wechat.appsecret", "");
     	}
@@ -194,13 +206,13 @@ public abstract class App {
     }
     
     private static String _hostUrl = "";
-    public static String setHostUrl(ServletRequest req) {
-    	if (Strings.isBlank(_hostUrl)) {
-    		_hostUrl = "http://" + req.getServerName() + ":" + req.getServerPort();
-    	}
-    	return _hostUrl;
+    public static void setHostUrl(String hostUrl) {
+    	 _hostUrl = hostUrl;
     }
-    public static String hostUrl() {
+    public static String getHostUrl() {
+    	if (Strings.isBlank(_hostUrl)) {
+    		_hostUrl = prop.getProperty("app.hosturl", "");
+    	}
     	return _hostUrl;
     }
     

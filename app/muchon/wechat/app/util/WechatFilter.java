@@ -9,9 +9,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import muchon.wechat.app.App;
+import org.nutz.lang.Strings;
 
-public class AppFilter implements Filter{
+import muchon.wechat.app.Context;
+
+public class WechatFilter implements Filter{
 
 	@Override
 	public void destroy() {
@@ -22,7 +24,9 @@ public class AppFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-		App.setHostUrl(req);
+		if (Strings.isBlank(Context.getHostUrl())) {
+			Context.setHostUrl("http://" + req.getServerName() + ":" + req.getServerPort());
+		}
 		chain.doFilter(req, resp);
 	}
 
